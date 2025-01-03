@@ -1,13 +1,11 @@
-package tech.scales.scales_app;
+package tech.scales;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ScalesAppApplication {
-
+public class ScalesApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(ScalesAppApplication.class, args);
+		SpringApplication.run(ScalesApplication.class, args);
 	}
-
 }

@@ -1,13 +1,12 @@
-package tech.scales.scales_app;
+package tech.scales;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ScalesAppApplicationTests {
+class ScalesApplicationTests {
 
 	@Test
 	void contextLoads() {
 	}
-
 }
