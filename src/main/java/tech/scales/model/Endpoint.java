@@ -2,7 +2,7 @@ package tech.scales.model;
 
 import java.util.Objects;
 
-import static tech.scales.util.Constants.STATUS_UNKNOWN;
+import static tech.scales.util.Constants.HC_STATUS_UNKNOWN;
 
 public class Endpoint {
 
@@ -13,13 +13,13 @@ public class Endpoint {
     public Endpoint() {
         this.endpointUrl = null;
         this.endpointName = null;
-        this.endpointStatus = STATUS_UNKNOWN;
+        this.endpointStatus = HC_STATUS_UNKNOWN;
     }
 
     public Endpoint(String endpointUrl, String endpointName) {
         this.endpointUrl = endpointUrl;
         this.endpointName = endpointName;
-        this.endpointStatus = STATUS_UNKNOWN;
+        this.endpointStatus = HC_STATUS_UNKNOWN;
     }
 
     public String getEndpointUrl() {
