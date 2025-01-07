@@ -4,11 +4,16 @@ import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import tech.scales.model.Endpoint;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import static tech.scales.util.Constants.HC_STATUS_HEALTHY;
+import static tech.scales.util.Constants.HC_STATUS_UNKNOWN;
 
 @Component
 public class HealthCheckScheduler {
@@ -44,8 +49,18 @@ public class HealthCheckScheduler {
         startScheduler();
     }
 
+    public synchronized void updateEndpoints(Endpoint endpoint) {
+        schedulerSettings.getEndpoints().add(endpoint);
+    }
+
     private void executeTask() {
-        logger.info("Running with {}", schedulerSettings.toString());
+        logger.info("Running Scheduler");
+
+        for (Endpoint endpoint: schedulerSettings.getEndpoints()) {
+            if (endpoint.getEndpointStatus().equals(HC_STATUS_UNKNOWN))
+                endpoint.setEndpointStatus(HC_STATUS_HEALTHY);
+            logger.info("Checking for {} at {}", endpoint.getEndpointName(), endpoint.getEndpointUrl());
+        }
     }
 
     @PreDestroy

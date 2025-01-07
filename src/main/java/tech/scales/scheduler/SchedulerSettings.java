@@ -2,6 +2,10 @@ package tech.scales.scheduler;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import tech.scales.model.Endpoint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class SchedulerSettings {
@@ -14,6 +18,12 @@ public class SchedulerSettings {
 
     @Value("${config.settings.hc.retry}")
     private int retryLimit;
+
+    private List<Endpoint> endpoints;
+
+    public SchedulerSettings() {
+        this.endpoints = new ArrayList<>();
+    }
 
     public synchronized int getFrequency() {
         return frequency;
@@ -39,12 +49,21 @@ public class SchedulerSettings {
         this.retryLimit = retryLimit;
     }
 
+    public synchronized List<Endpoint> getEndpoints() {
+        return endpoints;
+    }
+
+    public synchronized void setEndpoints(List<Endpoint> endpoints) {
+        this.endpoints = endpoints;
+    }
+
     @Override
     public String toString() {
         return "SchedulerSettings{" +
                 "frequency=" + frequency +
                 ", timeout=" + timeout +
                 ", retryLimit=" + retryLimit +
+                ", endpoints=" + endpoints +
                 '}';
     }
 }

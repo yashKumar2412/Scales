@@ -84,6 +84,7 @@ public class ConfigurationService {
         }
 
         Endpoint newEndpoint = new Endpoint(request.getUrl(), request.getName());
+        scheduler.updateEndpoints(newEndpoint);
         endpoints.add(newEndpoint);
 
         return SUCCESS + ": Server added successfully.";
