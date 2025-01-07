@@ -4,7 +4,6 @@ import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import tech.scales.service.ConfigurationService;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -46,7 +45,7 @@ public class HealthCheckScheduler {
     }
 
     private void executeTask() {
-        logger.info("Running with " + schedulerSettings.toString());
+        logger.info("Running with {}", schedulerSettings.toString());
     }
 
     @PreDestroy

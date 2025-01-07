@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import tech.scales.controller.ConfigurationController;
+import tech.scales.model.AddServerRequest;
 import tech.scales.model.Endpoint;
 import tech.scales.scheduler.HealthCheckScheduler;
 
@@ -40,7 +40,7 @@ public class ConfigurationService {
         configSettings.put(CONFIG_HC_TIMEOUT, timeout);
         configSettings.put(CONFIG_HC_RETRY_LIMIT, retry);
 
-        logger.info("Retrieved all configuration settings");
+        logger.info("Retrieved all configuration settings.");
         return configSettings;
     }
 
@@ -59,14 +59,38 @@ public class ConfigurationService {
                 throw new Exception("Timeout must be less than Frequency.");
 
             scheduler.updateSettings(frequency, timeout, retry);
-
             logger.info("Updated configuration settings successfully");
-
 
             return SUCCESS;
         } catch (Exception e) {
             logger.error("Failed to update configurations");
             return FAILURE + ": " + e.getMessage();
         }
+    }
+
+    public String addServer(AddServerRequest request) {
+        boolean exists = false;
+
+        for (Endpoint endpoint: endpoints) {
+            if (endpoint.getEndpointUrl().equals(request.getUrl())) {
+                exists = true;
+                break;
+            }
+        }
+
+        if (exists) {
+            logger.error("Failed to add server due to duplication issue.");
+            return FAILURE + ": Duplicate server exists.";
+        }
+
+        Endpoint newEndpoint = new Endpoint(request.getUrl(), request.getName());
+        endpoints.add(newEndpoint);
+
+        return SUCCESS + ": Server added successfully.";
+    }
+
+    public List<Endpoint> getServers() {
+        logger.info("Retrieved all linked servers.");
+        return endpoints;
     }
 }
