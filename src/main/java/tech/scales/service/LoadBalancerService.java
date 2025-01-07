@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class LoadBalancerService {
 
@@ -16,10 +19,20 @@ public class LoadBalancerService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public ResponseEntity<?> forwardRequest(String path, String method, String queryString, String body, HttpServletRequest request) {
-        String backendUrl = "http://service:8081";
+    private int currentServerIndex = 0;
+
+    public ResponseEntity<?> forwardRequest(String path, String method, String queryString, String body, HttpServletRequest request, List<String> backendServers) {
+        String backendUrl = chooseBackendServer(backendServers);
         String targetUrl = backendUrl + path + (queryString != null ? "?" + queryString : "");
         logger.info("Forwarding {} request to {}", method, targetUrl);
-        return null;
+        return ResponseEntity.of(Optional.of(targetUrl));
+    }
+
+    private String chooseBackendServer(List<String> backendServers) {
+        int numOfAvailableServers = backendServers.size();
+        currentServerIndex = currentServerIndex % numOfAvailableServers;
+        String chosenServer = backendServers.get(currentServerIndex);
+        currentServerIndex = currentServerIndex + 1;
+        return chosenServer;
     }
 }

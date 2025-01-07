@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -19,7 +21,13 @@ public class HeartbeatService {
     @Value("${config.heartbeat-queue.url}")
     private String queueUrl;
 
-    public void checkHeartbeatQueue() {
+    public List<String> checkHeartbeatQueue() {
         logger.info("Reading from {} HeartbeatQueue: {}", queueType, queueUrl);
+        List<String> backendServers = new ArrayList<>();
+
+        backendServers.add("http://service-us-east-1");
+        backendServers.add("http://service-us-east-2");
+
+        return backendServers;
     }
 }
