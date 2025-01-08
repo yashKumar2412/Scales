@@ -4,12 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Enumeration;
 
 @Service
 public class LoadBalancerService {
@@ -21,11 +22,33 @@ public class LoadBalancerService {
 
     private int currentServerIndex = 0;
 
-    public ResponseEntity<?> forwardRequest(String path, String method, String queryString, String body, HttpServletRequest request, List<String> backendServers) {
+    public ResponseEntity<?> forwardRequest(HttpServletRequest request, String body, List<String> backendServers) {
+        String path = request.getRequestURI();
+        String method = request.getMethod();
+        String queryString = request.getQueryString();
+
         String backendUrl = chooseBackendServer(backendServers);
         String targetUrl = backendUrl + path + (queryString != null ? "?" + queryString : "");
         logger.info("Forwarding {} request to {}", method, targetUrl);
-        return ResponseEntity.of(Optional.of(targetUrl));
+
+        HttpHeaders headers = new HttpHeaders();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            headers.add(headerName, request.getHeader(headerName));
+        }
+
+        HttpEntity<String> entity = new HttpEntity<>(body, headers);
+        ResponseEntity<String> response = restTemplate.exchange(
+                targetUrl,
+                HttpMethod.valueOf(method),
+                entity,
+                String.class
+        );
+
+        return ResponseEntity.status(response.getStatusCode())
+                .headers(response.getHeaders())
+                .body(response.getBody());
     }
 
     private String chooseBackendServer(List<String> backendServers) {

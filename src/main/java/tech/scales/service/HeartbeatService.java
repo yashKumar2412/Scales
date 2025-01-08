@@ -25,8 +25,8 @@ public class HeartbeatService {
         logger.info("Reading from {} HeartbeatQueue: {}", queueType, queueUrl);
         List<String> backendServers = new ArrayList<>();
 
-        backendServers.add("http://service-us-east-1");
-        backendServers.add("http://service-us-east-2");
+        backendServers.add("http://url-1:port");
+        backendServers.add("http://url-2:port");
 
         return backendServers;
     }

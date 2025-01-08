@@ -30,11 +30,7 @@ public class LoadBalancerController {
 
     @RequestMapping(value = "/**", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
     public ResponseEntity<?> forwardRequest(HttpServletRequest request, @RequestBody(required = false) String body) {
-        String path = request.getRequestURI();
-        String method = request.getMethod();
-        String queryString = request.getQueryString();
-
-        return loadBalancerService.forwardRequest(path, method, queryString, body, request, backendServers);
+        return loadBalancerService.forwardRequest(request, body, backendServers);
     }
 
     @Scheduled(fixedRateString = "${config.scheduler.fixed-rate}", initialDelayString = "${config.scheduler.initial-delay}")
