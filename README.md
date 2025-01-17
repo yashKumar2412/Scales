@@ -36,6 +36,6 @@ Scales is a dynamic load balancer built with Spring Boot, designed to manage and
       Use this image to deploy to a server like AWS EC2.
 
 ## Future Improvements
-- Upload test-app for EC2 to provide example code to use Scales.
-- Expand test-app with ECS and Lambda examples for better documentation examples.
 - Expand Scales to other messaging queues (RabbitMQ, Kafka).
+- Add options for multiple load balancing algorithms.
+- Expand test-app with ECS and Lambda examples for better documentation examples.
