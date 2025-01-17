@@ -18,7 +18,7 @@ Scales is a dynamic load balancer built with Spring Boot, designed to manage and
     - Update scheduler-related configuration (initial delay and fixed rate)for both apps.
     - Create appropriate IAM Roles and Security Groups for both apps.
 2. Your Server Application:
-    - Update your server code to send a heartbeat message to the SQS queue containing the instance's IP and port (refer test-app for EC2 instance example).
+    - Update your server code to send a heartbeat message to the SQS queue containing the instance's IP and port (refer [Scales-Test-App](https://github.com/yashKumar2412/Scales-Test-App) for EC2 instance example).
 3. Scales:
     - To run the application locally, run the following commands: 
         ```code
@@ -36,6 +36,6 @@ Scales is a dynamic load balancer built with Spring Boot, designed to manage and
       Use this image to deploy to a server like AWS EC2.
 
 ## Future Improvements
-- Upload test-app for EC2 to provide example code to use Scales.
-- Expand test-app with ECS and Lambda examples for better documentation examples.
 - Expand Scales to other messaging queues (RabbitMQ, Kafka).
+- Add options for multiple load balancing algorithms.
+- Expand test-app with ECS and Lambda examples for better documentation examples.
