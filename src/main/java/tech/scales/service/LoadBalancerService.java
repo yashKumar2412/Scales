@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Enumeration;
+import java.util.Optional;
 
 @Service
 public class LoadBalancerService {
@@ -28,6 +29,12 @@ public class LoadBalancerService {
         String queryString = request.getQueryString();
 
         String backendUrl = chooseBackendServer(backendServers);
+
+        if (backendUrl == null) {
+            logger.error("No server available.");
+            return ResponseEntity.status(HttpStatusCode.valueOf(500)).body(Optional.of("No server available."));
+        }
+
         String targetUrl = backendUrl + path + (queryString != null ? "?" + queryString : "");
         logger.info("Forwarding {} request to {}", method, targetUrl);
 
@@ -53,6 +60,10 @@ public class LoadBalancerService {
 
     private String chooseBackendServer(List<String> backendServers) {
         int numOfAvailableServers = backendServers.size();
+
+        if (numOfAvailableServers == 0)
+            return null;
+
         currentServerIndex = currentServerIndex % numOfAvailableServers;
         String chosenServer = backendServers.get(currentServerIndex);
         currentServerIndex = currentServerIndex + 1;
